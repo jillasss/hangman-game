@@ -1,0 +1,79 @@
+
+/* Основной стиль для страницы */
+$font-family: Arial, sans-serif;
+$background-color: #f4f4f9;
+$primary-color: #4CAF50;
+$disabled-color: #ccc;
+$hover-color: #45a049;
+$active-color: #3e8e41;
+$win-color: #388e3c;
+$lose-color: #d32f2f;
+
+body {
+  font-family: $font-family;
+  background-color: $background-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  font-size: 36px;
+  color: #333;
+}
+
+button {
+  background-color: $primary-color;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  font-size: 18px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+button:disabled {
+  background-color: $disabled-color;
+  cursor: not-allowed;
+}
+
+button:hover {
+  background-color: $hover-color;
+}
+
+button:active {
+  background-color: $active-color;
+}
+
+/* Стили для букв */
+span {
+  font-size: 30px;
+  margin: 0 5px;
+  font-weight: bold;
+}
+
+p {
+  font-size: 20px;
+  text-align: center;
+}
+
+/* Стили для сообщений о выигрыше/проигрыше */
+.game-message {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+
+  &.win {
+    color: $win-color;
+  }
+
+  &.lose {
+    color: $lose-color;
+  }
+}
