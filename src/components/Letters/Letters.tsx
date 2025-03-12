@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/Letter.scss';
+import './styles/Letters.scss';
 
 interface LettersProps {
   onLetterClick: (letter: string) => void;
