@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Letters from "../Letters/Letters";
 import KeyboardInput from "../Keyboard/KeyboardInput";
+import ManDrawing from "../ManDrawing/ManDrawing";
+
 import "./styles/Hangman.scss";
 
 const Hangman: React.FC = () => {
@@ -10,7 +12,6 @@ const Hangman: React.FC = () => {
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [playerWon, setPlayerWon] = useState<boolean>(false);
 
-  // Существующий код загрузки слова
   useEffect(() => {
     loadNewWord();
   }, []);
@@ -29,24 +30,29 @@ const Hangman: React.FC = () => {
       });
   };
 
-  // Существующий код проверки буквы
   const checkLetter = (letter: string): void => {
-    if (isGameOver || usedLetters.includes(letter)) {
+    if (isGameOver) {
+      return;
+    }
+    if (usedLetters.includes(letter)) {
       return;
     }
 
     setUsedLetters([...usedLetters, letter]);
 
     if (!wordToGuess.includes(letter)) {
-      const newMistakes: number = mistakes + 1;
+      const newMistakes = mistakes + 1;
       setMistakes(newMistakes);
       
       if (newMistakes >= 6) {
         setIsGameOver(true);
+        setUsedLetters(wordToGuess.split('').filter((letter, index, arr) => 
+          arr.indexOf(letter) === index
+        ));
       }
     }
 
-    const isWordGuessed: boolean = wordToGuess
+    const isWordGuessed = wordToGuess
       .split("")
       .every((char) => usedLetters.includes(char) || char === letter);
     
@@ -56,7 +62,6 @@ const Hangman: React.FC = () => {
     }
   };
 
-  // Добавляем новую функцию для проверки целого слова
   const checkWord = (guessedWord: string): void => {
     if (guessedWord.toLowerCase() === wordToGuess.toLowerCase()) {
       setUsedLetters(wordToGuess.split('').filter((letter, index, arr) => 
@@ -65,15 +70,17 @@ const Hangman: React.FC = () => {
       setPlayerWon(true);
       setIsGameOver(true);
     } else {
-      const newMistakes = mistakes + 2; // Штраф за неверное слово
+      const newMistakes = mistakes + 2;
       setMistakes(newMistakes);
       if (newMistakes >= 6) {
         setIsGameOver(true);
+        setUsedLetters(wordToGuess.split('').filter((letter, index, arr) => 
+          arr.indexOf(letter) === index
+        ));
       }
     }
   };
 
-  // Существующий код новой игры
   const startNewGame = (): void => {
     setMistakes(0);
     setUsedLetters([]);
@@ -86,6 +93,8 @@ const Hangman: React.FC = () => {
     <div className="hangman-container">
       <h1 className="hangman-title">Виселица</h1>
       
+      <ManDrawing mistakes={mistakes} />
+
       <Letters
         wordToGuess={wordToGuess}
         onLetterClick={checkLetter}
@@ -97,11 +106,10 @@ const Hangman: React.FC = () => {
       
       {isGameOver && (
         <p className={`game-message ${playerWon ? "win" : "lose"}`}>
-          {playerWon ? "Вы выиграли!" : "Вы проиграли!"}
+          {playerWon ? "Вы выиграли!" : `Вы проиграли! Загаданное слово: ${wordToGuess}`}
         </p>
       )}
 
-      
       <KeyboardInput 
         onGuess={checkWord}
         isGameOver={isGameOver}
